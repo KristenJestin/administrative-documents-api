@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domain.Entities
+namespace Domain.Common
 {
     public abstract class DatedBaseEntity : BaseEntity
     {
