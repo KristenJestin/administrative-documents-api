@@ -52,12 +52,20 @@ namespace Infrastructure.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // relations
+            builder.Entity<Document>()
+                .HasOne(a => a.File)
+                .WithOne(b => b.Document)
+                .HasForeignKey<Document>(b => b.FileRef);
+
+            // decimal
             foreach (var property in builder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetProperties())
                 .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
             {
                 property.SetColumnType("decimal(12,3)");
             }
+
             base.OnModelCreating(builder);
         }
         #endregion
