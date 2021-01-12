@@ -16,7 +16,12 @@ namespace Infrastructure.Identity
                     configuration.GetConnectionString("IdentityConnection"),
                     b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+            //services.AddIdentity<ApplicationUser>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
+            //    services.AddIdentity<ApplicationUser, IdentityRole<int>>()
+            //.AddEntityFrameworkStores<IdentityContext, int>()
+            //.AddDefaultTokenProviders();
 
             //#region services
             //services.AddTransient<IAccountService, AccountService>();

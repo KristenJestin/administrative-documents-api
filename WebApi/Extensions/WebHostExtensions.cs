@@ -26,7 +26,7 @@ namespace WebApi.Extensions
 
 				// user
 				UserManager<ApplicationUser> userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-				RoleManager<IdentityRole> roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+				RoleManager<ApplicationRole> roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
 
 				// seeds				
 				#region user

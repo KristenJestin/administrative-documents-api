@@ -12,7 +12,8 @@ namespace Infrastructure.Identity.Migrations
                 name: "Role",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 85, nullable: false),
+                    Id = table.Column<int>(maxLength: 85, nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 85, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
@@ -26,7 +27,8 @@ namespace Infrastructure.Identity.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 85, nullable: false),
+                    Id = table.Column<int>(maxLength: 85, nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 85, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -55,7 +57,7 @@ namespace Infrastructure.Identity.Migrations
                 {
                     Id = table.Column<int>(maxLength: 85, nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(maxLength: 85, nullable: false),
+                    RoleId = table.Column<int>(maxLength: 85, nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -83,7 +85,7 @@ namespace Infrastructure.Identity.Migrations
                     Revoked = table.Column<DateTime>(nullable: true),
                     RevokedByIp = table.Column<string>(nullable: true),
                     ReplacedByToken = table.Column<string>(nullable: true),
-                    ApplicationUserId = table.Column<string>(nullable: true)
+                    ApplicationUserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -102,7 +104,7 @@ namespace Infrastructure.Identity.Migrations
                 {
                     Id = table.Column<int>(maxLength: 85, nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(maxLength: 85, nullable: false),
+                    UserId = table.Column<int>(maxLength: 85, nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -124,7 +126,7 @@ namespace Infrastructure.Identity.Migrations
                     LoginProvider = table.Column<string>(maxLength: 85, nullable: false),
                     ProviderKey = table.Column<string>(maxLength: 85, nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(maxLength: 85, nullable: false)
+                    UserId = table.Column<int>(maxLength: 85, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -141,8 +143,8 @@ namespace Infrastructure.Identity.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(maxLength: 85, nullable: false),
-                    RoleId = table.Column<string>(maxLength: 85, nullable: false)
+                    UserId = table.Column<int>(maxLength: 85, nullable: false),
+                    RoleId = table.Column<int>(maxLength: 85, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,7 +167,7 @@ namespace Infrastructure.Identity.Migrations
                 name: "UserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(maxLength: 85, nullable: false),
+                    UserId = table.Column<int>(maxLength: 85, nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 85, nullable: false),
                     Name = table.Column<string>(maxLength: 85, nullable: false),
                     Value = table.Column<string>(nullable: true)
