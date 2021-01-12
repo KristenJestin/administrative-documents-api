@@ -1,4 +1,4 @@
-using AutoWrapper;
+﻿using AutoWrapper;
 using Application.Interfaces;
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using WebApi.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi
 {
