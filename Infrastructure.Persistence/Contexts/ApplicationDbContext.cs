@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Application.Interfaces;
+using Domain.Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -11,10 +12,12 @@ namespace Infrastructure.Persistence.Contexts
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext()
+        private readonly IAuthenticatedUserService _authenticatedUser;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IAuthenticatedUserService authenticatedUser) : base(options)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            // TODO: add authenticated user
+            _authenticatedUser = authenticatedUser;
         }
 
         public DbSet<DocumentType> DocumentTypes { get; set; }
@@ -34,17 +37,28 @@ namespace Infrastructure.Persistence.Contexts
                 if (entry.State.Equals(EntityState.Added))
                 {
                     entry.Entity.CreatedAt = DateTime.UtcNow;
-                    // TODO: update creater user
+                    entry.Entity.CreatedBy = _authenticatedUser.UserId;
                 }
                 // on update
                 else if (entry.State.Equals(EntityState.Modified))
                 {
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
-                    // TODO : update updater user
+                    entry.Entity.UpdatedBy = _authenticatedUser.UserId;
                 }
             }
 
             return base.SaveChangesAsync(cancellationToken);
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            foreach (var property in builder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+            {
+                property.SetColumnType("decimal(12,3)");
+            }
+            base.OnModelCreating(builder);
         }
         #endregion
     }
