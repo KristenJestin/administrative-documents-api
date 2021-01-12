@@ -9,6 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoWrapper.Core" Version="4.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure.Identity\Infrastructure.Identity.csproj" />
     <ProjectReference Include="..\Infrastructure.Persistence\Infrastructure.Persistence.csproj" />
