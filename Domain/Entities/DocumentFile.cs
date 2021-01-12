@@ -8,6 +8,8 @@ namespace Domain.Entities
         public string Path { get; set; }
         public string Encryption { get; set; }
         public long Size { get; set; }
+        public string MimeType { get; set; }
+        public string Dimensions { get; set; }
         public Document Document { get; set; }
     }
 }
