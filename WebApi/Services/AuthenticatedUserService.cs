@@ -8,7 +8,7 @@ namespace WebApi.Services
 	{
 		public AuthenticatedUserService(IHttpContextAccessor httpContextAccessor)
 		{
-			string value = httpContextAccessor.HttpContext?.User?.FindFirstValue("uid");
+			string value = httpContextAccessor.HttpContext?.User?.FindFirstValue("id");
 
 			if (!string.IsNullOrWhiteSpace(value) && int.TryParse(value, out int id))
 			{
