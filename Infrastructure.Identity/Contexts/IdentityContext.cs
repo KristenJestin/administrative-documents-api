@@ -2,13 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Infrastructure.Identity.Contexts
 {
-    public class IdentityContext : IdentityDbContext<ApplicationUser>
+    public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
     {
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {
@@ -25,27 +22,27 @@ namespace Infrastructure.Identity.Contexts
                 entity.ToTable(name: "User");
             });
 
-            builder.Entity<IdentityRole>(entity =>
+            builder.Entity<ApplicationRole>(entity =>
             {
                 entity.Property(m => m.Id).HasMaxLength(85);
                 entity.Property(m => m.NormalizedName).HasMaxLength(85);
                 entity.ToTable(name: "Role");
             });
-            builder.Entity<IdentityUserRole<string>>(entity =>
+            builder.Entity<IdentityUserRole<int>>(entity =>
             {
                 entity.Property(m => m.UserId).HasMaxLength(85);
                 entity.Property(m => m.RoleId).HasMaxLength(85);
                 entity.ToTable("UserRoles");
             });
 
-            builder.Entity<IdentityUserClaim<string>>(entity =>
+            builder.Entity<IdentityUserClaim<int>>(entity =>
             {
                 entity.Property(m => m.Id).HasMaxLength(85);
                 entity.Property(m => m.UserId).HasMaxLength(85);
                 entity.ToTable("UserClaims");
             });
 
-            builder.Entity<IdentityUserLogin<string>>(entity =>
+            builder.Entity<IdentityUserLogin<int>>(entity =>
             {
                 entity.Property(m => m.LoginProvider).HasMaxLength(85);
                 entity.Property(m => m.ProviderKey).HasMaxLength(85);
@@ -53,14 +50,14 @@ namespace Infrastructure.Identity.Contexts
                 entity.ToTable("UserLogins");
             });
 
-            builder.Entity<IdentityRoleClaim<string>>(entity =>
+            builder.Entity<IdentityRoleClaim<int>>(entity =>
             {
                 entity.Property(m => m.Id).HasMaxLength(85);
                 entity.Property(m => m.RoleId).HasMaxLength(85);
                 entity.ToTable("RoleClaims");
             });
 
-            builder.Entity<IdentityUserToken<string>>(entity =>
+            builder.Entity<IdentityUserToken<int>>(entity =>
             {
                 entity.Property(m => m.UserId).HasMaxLength(85);
                 entity.Property(m => m.LoginProvider).HasMaxLength(85);

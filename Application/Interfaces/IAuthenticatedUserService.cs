@@ -2,6 +2,6 @@
 {
     public interface IAuthenticatedUserService
     {
-        string UserId { get; }
+        int UserId { get; }
     }
 }

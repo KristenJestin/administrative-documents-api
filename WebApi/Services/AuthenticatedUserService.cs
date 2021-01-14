@@ -8,9 +8,14 @@ namespace WebApi.Services
 	{
 		public AuthenticatedUserService(IHttpContextAccessor httpContextAccessor)
 		{
-			UserId = httpContextAccessor.HttpContext?.User?.FindFirstValue("uid");
+			string value = httpContextAccessor.HttpContext?.User?.FindFirstValue("id");
+
+			if (!string.IsNullOrWhiteSpace(value) && int.TryParse(value, out int id))
+			{
+				UserId = id;
+			}
 		}
 
-		public string UserId { get; }
+		public int UserId { get; }
 	}
 }
