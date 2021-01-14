@@ -14,7 +14,7 @@ namespace Domain.Entities
 
 
         #region driven by type
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
         public DateTime? Date { get; set; }
         public int? Duration { get; set; }
         public DateTime? EndDate { get; set; }

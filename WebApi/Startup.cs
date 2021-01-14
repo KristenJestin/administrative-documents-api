@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Application;
+using WebApi.Extensions;
 
 namespace WebApi
 {
@@ -26,11 +28,13 @@ namespace WebApi
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddApplicationLayer();
 			services.AddIdentityInfrastructure(Configuration);
 			services.AddPersistenceInfrastructure(Configuration);
 
 			services.AddControllers()
 				.AddNewtonsoftJson();
+			services.AddApiVersioningExtension();
 			// allow to manage model state via AutoWrapper
 			services.Configure<ApiBehaviorOptions>(options =>
 			{
