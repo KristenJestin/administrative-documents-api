@@ -110,7 +110,7 @@ namespace Infrastructure.Identity.Services
         private string RandomTokenString()
         {
             using RNGCryptoServiceProvider rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[40];
+            byte[] randomBytes = new byte[40];
             rngCryptoServiceProvider.GetBytes(randomBytes);
             // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Application.Features.Documents.Commands.CreateDocument;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +11,9 @@ namespace WebApi.Controllers.v1
 	{
 
 		[HttpPost]
-		public async Task<IActionResult> Post(/*CreateProductCommand command*/)
+		public async Task<IActionResult> Post(CreateDocumentCommand command)
 		{
-			return Ok("");
+			return Ok("test");
 		}
 	}
 }
