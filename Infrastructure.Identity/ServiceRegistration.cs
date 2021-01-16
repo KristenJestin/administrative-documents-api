@@ -35,7 +35,10 @@ namespace Infrastructure.Identity
             services.AddTransient<IAccountService, AccountService>();
             #endregion
 
-            services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
+            #region settings
+            services.Configure<JWTSettings>(configuration.GetSection("JWTSettings")); 
+            services.Configure<DocumentSettings>(configuration.GetSection("DocumentSettings")); 
+            #endregion
 
             services.AddAuthentication(options =>
             {

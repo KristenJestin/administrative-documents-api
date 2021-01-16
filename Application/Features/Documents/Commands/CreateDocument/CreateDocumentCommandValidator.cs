@@ -68,6 +68,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
                 {
                     RuleFor(d => d.File.Length)
                         .NotNull()
+                        .GreaterThan(0).WithMessage("{PropertyName} size must be greater than {ComparisonValue}.")
                         .LessThanOrEqualTo(52428800).WithMessage("{PropertyName} size is larger than allowed (50MB max).");
                     
                     RuleFor(d => d.File.ContentType)

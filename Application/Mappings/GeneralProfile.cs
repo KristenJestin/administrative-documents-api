@@ -10,7 +10,8 @@ namespace Application.Mappings
         {
             //CreateMap<Product, GetAllProductsViewModel>().ReverseMap();
             //CreateMap<GetAllProductsQuery, GetAllProductsParameter>();
-            CreateMap<CreateDocumentCommand, Document>();
+            CreateMap<CreateDocumentCommand, Document>()
+                .ForMember(x => x.File, y => y.Ignore());
         }
     }
 }

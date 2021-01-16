@@ -22,5 +22,9 @@
     <ProjectReference Include="..\Infrastructure.Shared\Infrastructure.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\Uploads\" />
+  </ItemGroup>
+
 
 </Project>
