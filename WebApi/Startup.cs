@@ -13,6 +13,11 @@ using WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using WebApi.Extensions;
+using System;
+using FluentValidation;
+using MediatR;
+using WebApi.Behaviours;
+using System.Linq;
 
 namespace WebApi
 {
@@ -35,6 +40,7 @@ namespace WebApi
 			services.AddControllers()
 				.AddNewtonsoftJson();
 			services.AddApiVersioningExtension();
+			services.AddValidationExtension();
 			// allow to manage model state via AutoWrapper
 			services.Configure<ApiBehaviorOptions>(options =>
 			{

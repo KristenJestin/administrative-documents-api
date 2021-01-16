@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Application.Features.Documents.Commands.CreateDocument;
+using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +13,12 @@ namespace WebApi.Controllers.v1
 	{
 
 		[HttpPost]
-		public async Task<IActionResult> Post(CreateDocumentCommand command)
+		public async Task<IActionResult> Post([FromForm] CreateDocumentCommand command)
 		{
-			return Ok("test");
+			if (command == null)
+				throw new ApiProblemDetailsException("Invalid JSON.", (int)HttpStatusCode.BadRequest);
+
+			return Ok(await Mediator.Send(command));
 		}
 	}
 }

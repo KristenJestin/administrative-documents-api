@@ -14,7 +14,7 @@ namespace Infrastructure.Persistence.Repositories
         public GenericRepositoryAsync(ApplicationDbContext dbContext)
             => _dbContext = dbContext;
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T> FindByIdAsync(int id)
             => await _dbContext.Set<T>().FindAsync(id);
 
         public async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize)

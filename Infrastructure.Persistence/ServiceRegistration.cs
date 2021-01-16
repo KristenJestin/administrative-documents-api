@@ -20,6 +20,7 @@ namespace Infrastructure.Persistence
             #region repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<IDocumentRepositoryAsync, DocumentRepositoryAsync>();
+            services.AddTransient<IDocumentTypeRepositoryAsync, DocumentTypeRepositoryAsync>();
             #endregion
         }
     }

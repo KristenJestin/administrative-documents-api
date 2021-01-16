@@ -17,7 +17,8 @@ namespace Domain.Entities
         public decimal? Amount { get; set; }
         public DateTime? Date { get; set; }
         public int? Duration { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime? EndDate
+            => Duration != null ? Date?.AddMonths(Duration.Value) : null;
         #endregion
     }
 }

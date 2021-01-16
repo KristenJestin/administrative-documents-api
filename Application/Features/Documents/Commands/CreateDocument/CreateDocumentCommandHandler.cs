@@ -20,7 +20,8 @@ namespace Application.Features.Documents.Commands.CreateDocument
         public async Task<int> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             Document document = _mapper.Map<Document>(request);
-            await _documentRepository.AddAsync(document);
+            // TODO: move file to folder, encode, add in database
+            await _documentRepository.AddAsync(document); // TODO: remove Save, create unitof work to add document and file in same sql request
             return document.Id;
         }
     }

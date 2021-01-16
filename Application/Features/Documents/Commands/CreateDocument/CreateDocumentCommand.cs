@@ -20,5 +20,9 @@ namespace Application.Features.Documents.Commands.CreateDocument
         public DateTime? Date { get; set; }
         public int? Duration { get; set; }
         #endregion
+
+        #region statics
+        public static readonly string[] ALLOWED_FILE_TYPES = new[] { "image/jpeg", "image/jpg", "image/png", "application/pdf" };
+        #endregion
     }
 }
