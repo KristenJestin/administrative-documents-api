@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210114182357_DocumentAmountDecimalNullable")]
+    partial class DocumentAmountDecimalNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,6 +39,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<int?>("Duration")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime");
 
                     b.Property<int>("FileRef")
                         .HasColumnType("int");
@@ -88,10 +93,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Encryption")
                         .HasColumnType("text");
-
-                    b.Property<string>("IV")
-                        .HasColumnType("varchar(255)")
-                        .HasMaxLength(255);
 
                     b.Property<string>("MimeType")
                         .HasColumnType("text");

@@ -1,18 +1,17 @@
-﻿using Application.Interfaces;
+﻿using Application.Interfaces.Services;
 using AutoWrapper.Wrappers;
 using Domain.Settings;
 using Infrastructure.Identity.Contexts;
 using Infrastructure.Identity.Models;
 using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Text;
 
 namespace Infrastructure.Identity
@@ -29,12 +28,15 @@ namespace Infrastructure.Identity
 
             // user
             services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
-            
+
             #region services
             services.AddTransient<IAccountService, AccountService>();
             #endregion
 
-            services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
+            #region settings
+            services.Configure<JWTSettings>(configuration.GetSection("JWTSettings")); 
+            services.Configure<DocumentSettings>(configuration.GetSection("DocumentSettings")); 
+            #endregion
 
             services.AddAuthentication(options =>
             {
@@ -59,28 +61,13 @@ namespace Infrastructure.Identity
 
                     o.Events = new JwtBearerEvents()
                     {
-                        OnAuthenticationFailed = c =>
-                        {
-                            c.NoResult();
-                            c.Response.StatusCode = 500;
-                            c.Response.ContentType = "text/plain";
-                            return c.Response.WriteAsync(c.Exception.ToString());
-                        },
-                        OnChallenge = context =>
-                        {
-                            context.HandleResponse();
-                            context.Response.StatusCode = 401;
-                            context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(new ApiResponse("You are not Authorized"));
-                            return context.Response.WriteAsync(result);
-                        },
-                        OnForbidden = context =>
-                        {
-                            context.Response.StatusCode = 403;
-                            context.Response.ContentType = "application/json";
-                            var result = JsonConvert.SerializeObject(new ApiResponse("You are not authorized to access this resource"));
-                            return context.Response.WriteAsync(result);
-                        },
+                        OnAuthenticationFailed = context
+                            // TODO: review the management of expired tokens that fall here
+                            => throw new ApiProblemDetailsException("An error occurred while processing your authentication key", (int)HttpStatusCode.BadRequest),
+                        OnChallenge = context
+                            => throw new ApiProblemDetailsException("You are not Authorized", (int)HttpStatusCode.Unauthorized),
+                        OnForbidden = context
+                            => throw new ApiProblemDetailsException("You are not authorized to access this resource", (int)HttpStatusCode.Forbidden),
                     };
                 });
         }

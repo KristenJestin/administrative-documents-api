@@ -1,5 +1,4 @@
 ﻿using AutoWrapper;
-using Application.Interfaces;
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +10,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Application;
+using WebApi.Extensions;
+using Infrastructure.Shared;
+using Application.Interfaces.Services;
 
 namespace WebApi
 {
@@ -26,11 +29,15 @@ namespace WebApi
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddApplicationLayer();
 			services.AddIdentityInfrastructure(Configuration);
 			services.AddPersistenceInfrastructure(Configuration);
+			services.AddSharedInfrastructure();
 
 			services.AddControllers()
 				.AddNewtonsoftJson();
+			services.AddApiVersioningExtension();
+			services.AddValidationExtension();
 			// allow to manage model state via AutoWrapper
 			services.Configure<ApiBehaviorOptions>(options =>
 			{
@@ -53,6 +60,7 @@ namespace WebApi
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
