@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Application.DTOs.Document;
 using Application.Features.Documents.Commands.CreateDocument;
 using Application.Features.Documents.Queries.GetDocumentById;
 using AutoWrapper.Wrappers;
@@ -23,7 +24,7 @@ namespace WebApi.Controllers.v1
 			if (command == null)
 				throw new ApiProblemDetailsException("Invalid JSON.", (int)HttpStatusCode.BadRequest);
 
-			Document document = await Mediator.Send(command);
+			ReadDocumentResponse document = await Mediator.Send(command);
 			return CreatedAtAction(nameof(Get), new { id = document.Id }, document);
 		}
 	}

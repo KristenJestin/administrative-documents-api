@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.DTOs.Document;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
 using Domain.Entities;
@@ -9,34 +10,43 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features.Documents.Commands.CreateDocument
 {
-    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, Document>
+    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, ReadDocumentResponse>
     {
         private readonly IDocumentRepositoryAsync _documentRepository;
+        private readonly IDocumentTypeRepositoryAsync _documentTypeRepository;
         private readonly IMapper _mapper;
         private readonly ICryptographyService _cryptographyService;
         private readonly DocumentSettings _settings;
-        public CreateDocumentCommandHandler(IDocumentRepositoryAsync documentRepository, IMapper mapper, ICryptographyService cryptographyService, IOptions<DocumentSettings> documentSettings)
+        public CreateDocumentCommandHandler(IDocumentRepositoryAsync documentRepository, IDocumentTypeRepositoryAsync documentTypeRepository, IMapper mapper, ICryptographyService cryptographyService, IOptions<DocumentSettings> documentSettings)
         {
             _documentRepository = documentRepository;
+            _documentTypeRepository = documentTypeRepository;
             _mapper = mapper;
             _cryptographyService = cryptographyService;
             _settings = documentSettings.Value;
         }
 
-        public async Task<Document> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<ReadDocumentResponse> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             Document document = _mapper.Map<Document>(request);
             DocumentFile file = await BuildFromFileAsync(request.File);
             document.File = file;
+            document.TypeId = request.Type;
+
+            // insert in database
             await _documentRepository.AddAsync(document);
-            return document;
+
+            // fill type
+            if (document.TypeId != null)
+                document.Type = await _documentTypeRepository.FindByIdAsync(document.TypeId.Value);
+
+            return _mapper.Map<ReadDocumentResponse>(document);
         }
 
         #region privates

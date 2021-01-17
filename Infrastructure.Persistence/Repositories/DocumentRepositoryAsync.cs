@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -13,6 +14,12 @@ namespace Infrastructure.Persistence.Repositories
         {
             _documents = dbContext.Set<Document>();
         }
+
+
+        public async Task<Document> FindByIdWithTypeAsync(int id)
+            => await _documents
+                .Include(d => d.Type)
+                .FirstOrDefaultAsync(d => d.Id == id);
 
         //public Task<bool> IsUniqueBarcodeAsync(string barcode)
         //{
