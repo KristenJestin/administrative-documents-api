@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
 
 namespace Application.Features.Documents.Commands.CreateDocument
 {
-    public class CreateDocumentCommand : IRequest<int>
+    public class CreateDocumentCommand : IRequest<Document>
     {
         public string Name { get; set; }
         public IFormFile File { get; set; }

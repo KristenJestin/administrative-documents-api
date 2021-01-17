@@ -1,59 +1,80 @@
 ﻿using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Settings;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Rijndael256;
 using System;
+using System.Drawing;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features.Documents.Commands.CreateDocument
 {
-    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, int>
+    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, Document>
     {
         private readonly IDocumentRepositoryAsync _documentRepository;
         private readonly IMapper _mapper;
+        private readonly ICryptographyService _cryptographyService;
         private readonly DocumentSettings _settings;
-        public CreateDocumentCommandHandler(IDocumentRepositoryAsync documentRepository, IMapper mapper, IOptions<DocumentSettings> documentSettings)
+        public CreateDocumentCommandHandler(IDocumentRepositoryAsync documentRepository, IMapper mapper, ICryptographyService cryptographyService, IOptions<DocumentSettings> documentSettings)
         {
             _documentRepository = documentRepository;
             _mapper = mapper;
+            _cryptographyService = cryptographyService;
             _settings = documentSettings.Value;
         }
 
-        public async Task<int> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<Document> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             Document document = _mapper.Map<Document>(request);
             DocumentFile file = await BuildFromFileAsync(request.File);
-            // TODO: move file to folder, encode, add in database
-            await _documentRepository.AddAsync(document); // TODO: remove Save, create unitof work to add document and file in same sql request
-            return document.Id;
+            document.File = file;
+            await _documentRepository.AddAsync(document);
+            return document;
         }
 
         #region privates
         private async Task<DocumentFile> BuildFromFileAsync(IFormFile file)
         {
+            // detect image dimensions
+            string dimensions = null;
+            try
+            {
+                using (Stream fileStream = file.OpenReadStream())
+                using (Image image = Image.FromStream(fileStream, false, true))
+                    dimensions = $"{image.Width},{image.Height}";
+            }
+            catch { }
+
             // copy file
             string resourcePath = Path.Combine("Resources", "Uploads");
             string destinationPath = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
             FileInfo fileInfo = new FileInfo(Path.Combine(destinationPath, GenerateUniqueFileName()));
 
+            // copy in resources folder
             using (var stream = new FileStream(fileInfo.FullName, FileMode.Create))
                 await file.CopyToAsync(stream);
 
-            // TODO: encrypt file
+            // encrypt file
+            string iv = Guid.NewGuid().ToString().AsSpan(0, 16).ToString();
+            byte[] cipher = _cryptographyService.Encrypt(await File.ReadAllBytesAsync(fileInfo.FullName), Encoding.UTF8.GetBytes(_settings.EncryptKey), Encoding.UTF8.GetBytes(iv));
+            await File.WriteAllBytesAsync(fileInfo.FullName, cipher);
 
             // create document file
             DocumentFile result = new DocumentFile
             {
                 OriginalName = file.FileName,
                 Path = fileInfo.Name,
-                Encryption = "AES",
+                Encryption = _cryptographyService.Name,
+                IV = iv,
                 Size = fileInfo.Length,
+                Dimensions = dimensions,
                 MimeType = file.ContentType,
             };
 

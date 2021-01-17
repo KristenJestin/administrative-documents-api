@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.DTOs.Account;
-using Application.Interfaces;
+using Application.Interfaces.Services;
 using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 

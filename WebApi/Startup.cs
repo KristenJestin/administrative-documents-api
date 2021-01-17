@@ -1,5 +1,4 @@
 ﻿using AutoWrapper;
-using Application.Interfaces;
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
@@ -13,11 +12,8 @@ using WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Application;
 using WebApi.Extensions;
-using System;
-using FluentValidation;
-using MediatR;
-using WebApi.Behaviours;
-using System.Linq;
+using Infrastructure.Shared;
+using Application.Interfaces.Services;
 
 namespace WebApi
 {
@@ -36,6 +32,7 @@ namespace WebApi
 			services.AddApplicationLayer();
 			services.AddIdentityInfrastructure(Configuration);
 			services.AddPersistenceInfrastructure(Configuration);
+			services.AddSharedInfrastructure();
 
 			services.AddControllers()
 				.AddNewtonsoftJson();
