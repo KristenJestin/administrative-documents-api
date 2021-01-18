@@ -12,15 +12,19 @@ namespace Infrastructure.Persistence
     {
         public static void AddPersistenceInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            // database
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySQL(
-                   configuration.GetConnectionString("DefaultConnection"),
-                   b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                options.UseMySql(
+                    configuration.GetConnectionString("DefaultConnection"),
+                    ServerVersion.AutoDetect(configuration.GetConnectionString("DefaultConnection"))
+                )
+            );
 
             #region repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<IDocumentRepositoryAsync, DocumentRepositoryAsync>();
             services.AddTransient<IDocumentTypeRepositoryAsync, DocumentTypeRepositoryAsync>();
+            services.AddTransient<IDocumentTagRepositoryAsync, DocumentTagRepositoryAsync>();
             #endregion
         }
     }

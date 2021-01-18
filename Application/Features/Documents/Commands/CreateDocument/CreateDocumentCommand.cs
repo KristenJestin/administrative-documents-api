@@ -4,6 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
 
 namespace Application.Features.Documents.Commands.CreateDocument
 {
@@ -13,6 +14,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
         public IFormFile File { get; set; }
         public string Note { get; set; }
         public int? Type { get; set; }
+        public IEnumerable<string> Tags { get; set; }
 
         //TODO: add folder management with folder ref or new folder
         //public Folder Folder { get; set; }

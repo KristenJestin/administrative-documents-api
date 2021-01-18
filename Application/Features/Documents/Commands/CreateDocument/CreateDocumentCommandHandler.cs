@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Document;
+﻿using Application.Common;
+using Application.DTOs.Document;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using AutoMapper;
@@ -8,8 +9,10 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,13 +23,24 @@ namespace Application.Features.Documents.Commands.CreateDocument
     {
         private readonly IDocumentRepositoryAsync _documentRepository;
         private readonly IDocumentTypeRepositoryAsync _documentTypeRepository;
+        private readonly IDocumentTagRepositoryAsync _documentTagRepository;
+        private readonly IAuthenticatedUserService _authenticatedUser;
         private readonly IMapper _mapper;
         private readonly ICryptographyService _cryptographyService;
         private readonly DocumentSettings _settings;
-        public CreateDocumentCommandHandler(IDocumentRepositoryAsync documentRepository, IDocumentTypeRepositoryAsync documentTypeRepository, IMapper mapper, ICryptographyService cryptographyService, IOptions<DocumentSettings> documentSettings)
+        public CreateDocumentCommandHandler(
+            IDocumentRepositoryAsync documentRepository,
+            IDocumentTypeRepositoryAsync documentTypeRepository,
+            IDocumentTagRepositoryAsync documentTagRepository,
+            IAuthenticatedUserService authenticatedUser,
+            IMapper mapper,
+            ICryptographyService cryptographyService,
+            IOptions<DocumentSettings> documentSettings)
         {
             _documentRepository = documentRepository;
             _documentTypeRepository = documentTypeRepository;
+            _documentTagRepository = documentTagRepository;
+            _authenticatedUser = authenticatedUser;
             _mapper = mapper;
             _cryptographyService = cryptographyService;
             _settings = documentSettings.Value;
@@ -34,10 +48,37 @@ namespace Application.Features.Documents.Commands.CreateDocument
 
         public async Task<ReadDocumentResponse> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
+            // data
             Document document = _mapper.Map<Document>(request);
             DocumentFile file = await BuildFromFileAsync(request.File);
             document.File = file;
             document.TypeId = request.Type;
+
+            // tags
+            if (request.Tags != null && request.Tags.Count() > 0)
+            {
+                IEnumerable<DocumentTag> existingTags = await _documentTagRepository.GetSameUniqueNameAsync(request.Tags.Select(tag => Slugger.Generate(tag)), _authenticatedUser.UserId);
+
+                // add already exiting tags
+                _documentTagRepository.AttachRange(existingTags);
+                foreach (DocumentTag documentTag in existingTags)
+                    document.Tags.Add(documentTag);
+
+                // add new tags
+                IEnumerable<string> existingTagSlugs = existingTags.Select(t => t.UniqueName);
+                foreach (string tag in request.Tags)
+                {
+                    string slug = Slugger.Generate(tag);
+                    if (!existingTagSlugs.Contains(slug))
+                    {
+                        document.Tags.Add(new DocumentTag
+                        {
+                            Name = tag,
+                            UniqueName = slug
+                        });
+                    }
+                }
+            }
 
             // insert in database
             await _documentRepository.AddAsync(document);
