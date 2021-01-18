@@ -101,7 +101,7 @@ namespace Infrastructure.Persistence.Migrations
                     UpdatedAt = table.Column<DateTime>(nullable: true),
                     UpdatedBy = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    FileRef = table.Column<int>(nullable: false),
+                    FileId = table.Column<int>(nullable: false),
                     Note = table.Column<string>(nullable: true),
                     TypeId = table.Column<int>(nullable: true),
                     FolderId = table.Column<int>(nullable: true),
@@ -114,8 +114,8 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Documents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Documents_DocumentFiles_FileRef",
-                        column: x => x.FileRef,
+                        name: "FK_Documents_DocumentFiles_FileId",
+                        column: x => x.FileId,
                         principalTable: "DocumentFiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -134,9 +134,9 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Documents_FileRef",
+                name: "IX_Documents_FileId",
                 table: "Documents",
-                column: "FileRef",
+                column: "FileId",
                 unique: true);
 
             migrationBuilder.CreateIndex(

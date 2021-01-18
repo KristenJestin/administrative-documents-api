@@ -6,7 +6,7 @@ namespace Domain.Entities
     public class Document : DatedBaseEntity
     {
         public string Name { get; set; }
-        public int FileRef { get; set; }
+        public int FileId { get; set; }
         public DocumentFile File { get; set; }
         public string Note { get; set; }
         public int? TypeId { get; set; }

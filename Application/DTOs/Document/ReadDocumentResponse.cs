@@ -7,7 +7,7 @@ namespace Application.DTOs.Document
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int FileRef { get; set; }
+        public int FileId { get; set; }
         public string Note { get; set; }
         public ReadDocumentTypeResponse Type { get; set; }
 

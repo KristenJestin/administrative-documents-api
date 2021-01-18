@@ -38,7 +38,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<int>("FileRef")
+                    b.Property<int>("FileId")
                         .HasColumnType("int");
 
                     b.Property<int?>("FolderId")
@@ -61,7 +61,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileRef")
+                    b.HasIndex("FileId")
                         .IsUnique();
 
                     b.HasIndex("FolderId");
@@ -215,7 +215,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.DocumentFile", "File")
                         .WithOne("Document")
-                        .HasForeignKey("Domain.Entities.Document", "FileRef")
+                        .HasForeignKey("Domain.Entities.Document", "FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -43,8 +43,10 @@ namespace WebApi.Extensions
 				await identityContext.SaveChangesAsync();
 
 				#region document
+#if DEBUG
 				if (!await applicationDbContext.DocumentTypes.AnyAsync())
 					await DocumentTypeSeed.SeedAsync(applicationDbContext);
+#endif
 				#endregion
 				await applicationDbContext.SaveChangesAsync();
 			}
