@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.Document;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.Wrappers;
 using AutoMapper;
 using AutoWrapper.Wrappers;
 using Domain.Entities;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Documents.Queries.GetDocumentById
 {
-    public class GetDocumentByIdQueryHandler : IRequestHandler<GetDocumentByIdQuery, ReadDocumentResponse>
+    public class GetDocumentByIdQueryHandler : IRequestHandler<GetDocumentByIdQuery, BasicApiResponse<ReadDocumentResponse>>
     {
         private readonly IDocumentRepositoryAsync _documentRepository;
         private readonly IAuthenticatedUserService _authenticatedUser;
@@ -23,7 +24,7 @@ namespace Application.Features.Documents.Queries.GetDocumentById
             _mapper = mapper;
         }
 
-        public async Task<ReadDocumentResponse> Handle(GetDocumentByIdQuery query, CancellationToken cancellationToken)
+        public async Task<BasicApiResponse<ReadDocumentResponse>> Handle(GetDocumentByIdQuery query, CancellationToken cancellationToken)
         {
             Document document = await _documentRepository.FindByIdWithTypeAndTagsAsync(query.Id);
 
@@ -32,7 +33,8 @@ namespace Application.Features.Documents.Queries.GetDocumentById
             if(document.CreatedBy != _authenticatedUser.UserId)
                 throw new ApiProblemDetailsException($"You are not authorized to access this resource.", (int)HttpStatusCode.Forbidden);
 
-            return _mapper.Map<ReadDocumentResponse>(document);
+            ReadDocumentResponse dto = _mapper.Map<ReadDocumentResponse>(document);
+            return new BasicApiResponse<ReadDocumentResponse>(dto);
         }
     }
 }
