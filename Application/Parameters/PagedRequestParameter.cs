@@ -13,7 +13,7 @@
         public PagedRequestParameter(int page, int pageSize)
         {
             Page = page < 1 ? 1 : page;
-            PageSize = pageSize > 15 ? 15 : pageSize;
+            PageSize = pageSize > 10 ? 10 : pageSize;
         }
     }
 }
