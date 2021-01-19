@@ -56,7 +56,7 @@ namespace Infrastructure.Persistence.Contexts
             builder.Entity<Document>()
                 .HasOne(a => a.File)
                 .WithOne(b => b.Document)
-                .HasForeignKey<Document>(b => b.FileRef);
+                .HasForeignKey<Document>(b => b.FileId);
 
             // decimal
             foreach (var property in builder.Model.GetEntityTypes()

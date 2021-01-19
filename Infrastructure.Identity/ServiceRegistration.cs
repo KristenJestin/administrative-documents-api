@@ -22,9 +22,11 @@ namespace Infrastructure.Identity
         {
             // database
             services.AddDbContext<IdentityContext>(options =>
-                options.UseMySQL(
+                options.UseMySql(
                     configuration.GetConnectionString("IdentityConnection"),
-                    b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
+                    ServerVersion.AutoDetect(configuration.GetConnectionString("IdentityConnection"))
+                )
+            );
 
             // user
             services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();

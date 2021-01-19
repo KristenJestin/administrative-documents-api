@@ -6,19 +6,17 @@ using Domain.Entities;
 
 namespace Application.Mappings
 {
-    public class GeneralProfile : Profile
+    public class DocumentProfile : Profile
     {
-        public GeneralProfile()
+        public DocumentProfile()
         {
             //CreateMap<Product, GetAllProductsViewModel>().ReverseMap();
             //CreateMap<GetAllProductsQuery, GetAllProductsParameter>();
             CreateMap<CreateDocumentCommand, Document>()
+                .ForMember(x => x.Tags, y => y.Ignore())
                 .ForMember(x => x.File, y => y.Ignore())
                 .ForMember(x => x.Type, y => y.Ignore());
             CreateMap<Document, ReadDocumentResponse>();
-
-
-            CreateMap<DocumentType, ReadDocumentTypeResponse>();
         }
     }
 }

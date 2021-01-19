@@ -6,6 +6,6 @@ namespace Application.Interfaces.Repositories
     public interface IDocumentRepositoryAsync : IGenericRepositoryAsync<Document>
     {
         //Task<bool> IsUniqueNameFolderAsync(string barcode);
-        Task<Document> FindByIdWithTypeAsync(int id);
+        Task<Document> FindByIdWithTypeAndTagsAsync(int id);
     }
 }

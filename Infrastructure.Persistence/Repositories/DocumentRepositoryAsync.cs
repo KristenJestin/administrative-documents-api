@@ -16,9 +16,10 @@ namespace Infrastructure.Persistence.Repositories
         }
 
 
-        public async Task<Document> FindByIdWithTypeAsync(int id)
+        public async Task<Document> FindByIdWithTypeAndTagsAsync(int id)
             => await _documents
                 .Include(d => d.Type)
+                .Include(d => d.Tags)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
         //public Task<bool> IsUniqueBarcodeAsync(string barcode)
