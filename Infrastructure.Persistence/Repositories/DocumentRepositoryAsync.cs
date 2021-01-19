@@ -2,6 +2,8 @@
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
@@ -15,6 +17,14 @@ namespace Infrastructure.Persistence.Repositories
             _documents = dbContext.Set<Document>();
         }
 
+        public override async Task<IReadOnlyList<Document>> GetPagedReponseAsync(int pageNumber, int pageSize)
+            => await _documents
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(d => d.CreatedAt)
+                .Include(d => d.Type)
+                .AsNoTracking()
+                .ToListAsync();
 
         public async Task<Document> FindByIdWithTypeAndTagsAsync(int id)
             => await _documents

@@ -17,7 +17,7 @@ namespace Infrastructure.Persistence.Repositories
         public virtual async Task<T> FindByIdAsync(int id)
             => await _dbContext.Set<T>().FindAsync(id);
 
-        public async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize)
+        public virtual async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize)
             => await _dbContext
                 .Set<T>()
                 .Skip((pageNumber - 1) * pageSize)

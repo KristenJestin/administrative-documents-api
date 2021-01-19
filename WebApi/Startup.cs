@@ -51,7 +51,12 @@ namespace WebApi
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions { UseApiProblemDetailsException = true });
+			app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
+			{
+				UseCustomSchema = true,
+				UseApiProblemDetailsException = true,
+				IgnoreNullValue =false
+			});
 
 			if (env.IsDevelopment())
 			{

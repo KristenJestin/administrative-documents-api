@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Document;
+using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Application.Features.Documents.Commands.CreateDocument
 {
-    public class CreateDocumentCommand : IRequest<ReadDocumentResponse>
+    public class CreateDocumentCommand : IRequest<BasicApiResponse<ReadDocumentResponse>>
     {
         public string Name { get; set; }
         public IFormFile File { get; set; }

@@ -2,6 +2,7 @@
 using Application.DTOs.Document;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Settings;
@@ -19,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Documents.Commands.CreateDocument
 {
-    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, ReadDocumentResponse>
+    public class CreateDocumentCommandHandler : IRequestHandler<CreateDocumentCommand, BasicApiResponse<ReadDocumentResponse>>
     {
         private readonly IDocumentRepositoryAsync _documentRepository;
         private readonly IDocumentTypeRepositoryAsync _documentTypeRepository;
@@ -46,7 +47,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
             _settings = documentSettings.Value;
         }
 
-        public async Task<ReadDocumentResponse> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<BasicApiResponse<ReadDocumentResponse>> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             // data
             Document document = _mapper.Map<Document>(request);
@@ -87,7 +88,8 @@ namespace Application.Features.Documents.Commands.CreateDocument
             if (document.TypeId != null)
                 document.Type = await _documentTypeRepository.FindByIdAsync(document.TypeId.Value);
 
-            return _mapper.Map<ReadDocumentResponse>(document);
+            ReadDocumentResponse dto = _mapper.Map<ReadDocumentResponse>(document);
+            return new BasicApiResponse<ReadDocumentResponse>(dto);
         }
 
         #region privates
