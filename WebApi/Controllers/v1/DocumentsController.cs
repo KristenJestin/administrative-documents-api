@@ -6,8 +6,8 @@ using Application.Features.Documents.Queries.GetAllDocuments;
 using Application.Features.Documents.Queries.GetDocumentById;
 using Application.Wrappers;
 using AutoWrapper.Wrappers;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
@@ -28,7 +28,7 @@ namespace WebApi.Controllers.v1
 		public async Task<IActionResult> Post([FromForm] CreateDocumentCommand command)
 		{
 			if (command == null)
-				throw new ApiProblemDetailsException("Invalid JSON.", (int)HttpStatusCode.BadRequest);
+				throw new ApiProblemDetailsException("Invalid JSON.", StatusCodes.Status400BadRequest);
 
 			BasicApiResponse<ReadDocumentResponse> response = await Mediator.Send(command);
 			return CreatedAtAction(nameof(Get), new { id = response.Result.Id }, response);

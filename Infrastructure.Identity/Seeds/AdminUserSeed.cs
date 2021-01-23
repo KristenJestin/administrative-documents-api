@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Identity.Seeds
 {
-    public static class BasicUserSeed
+    public static class AdminUserSeed
     {
         public static async Task SeedAsync(IAccountService service, IdentityDbContext context)
         {
@@ -15,8 +15,8 @@ namespace Infrastructure.Identity.Seeds
             string password = "123Pa$$word!";
             RegisterRequest register = new RegisterRequest
             {
-                Username = "basicuser",
-                Email = "basicuser@gmail.com",
+                Username = "adminuser",
+                Email = "adminuser@gmail.com",
                 Password = password,
                 ConfirmPassword = password                
             };
@@ -24,6 +24,7 @@ namespace Infrastructure.Identity.Seeds
             Account account = await service.RegisterAsync(register);
 
             account.Verified = DateTime.UtcNow;
+            account.Role = AccountRole.Admin;
             context.Update(account);
             await context.SaveChangesAsync();
         }

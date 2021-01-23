@@ -11,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Application;
-using WebApi.Extensions;
 using Infrastructure.Shared;
 using Application.Interfaces.Services;
 
@@ -29,6 +28,8 @@ namespace WebApi
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddCors();
+
 			services.AddApplicationLayer();
 			services.AddIdentityInfrastructure(Configuration);
 			services.AddPersistenceInfrastructure(Configuration);
@@ -55,23 +56,27 @@ namespace WebApi
 			{
 				UseCustomSchema = true,
 				UseApiProblemDetailsException = true,
-				IgnoreNullValue =false
+				IgnoreNullValue = false
 			});
 
 			if (env.IsDevelopment())
 			{
-				app.UseDeveloperExceptionPage();
+				//app.UseDeveloperExceptionPage();
 			}
 
 			app.UseRouting();
 
+			// global cors policy
+			app.UseCors(x => x
+				.SetIsOriginAllowed(origin => true)
+				.AllowAnyMethod()
+				.AllowAnyHeader()
+				.AllowCredentials());
+
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-			});
+			app.UseEndpoints(endpoints => endpoints.MapControllers());
 		}
 	}
 }
