@@ -66,7 +66,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
                     document.Tags.Add(documentTag);
 
                 // add new tags
-                IEnumerable<string> existingTagSlugs = existingTags.Select(t => t.UniqueName);
+                IEnumerable<string> existingTagSlugs = existingTags.Select(t => t.Slug);
                 foreach (string tag in request.Tags)
                 {
                     string slug = Slugger.Generate(tag);
@@ -75,7 +75,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
                         document.Tags.Add(new DocumentTag
                         {
                             Name = tag,
-                            UniqueName = slug
+                            Slug = slug
                         });
                     }
                 }

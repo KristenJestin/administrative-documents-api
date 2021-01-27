@@ -16,8 +16,8 @@ namespace WebApi.Controllers.v1
 	[ApiVersion("1.0")]
 	public class DocumentsController : BaseApiController
 	{
-		[HttpGet]
-		public async Task<IActionResult> Get([FromQuery] GetAllDocumentsParameter filter)
+		[HttpGet("[action]")]
+		public async Task<IActionResult> Latest([FromQuery] GetAllDocumentsParameter filter)
 			=> Ok(await Mediator.Send(new GetAllDocumentsQuery() { PageSize = filter.PageSize, Page = filter.Page }));
 
 		[HttpGet("{id}")]

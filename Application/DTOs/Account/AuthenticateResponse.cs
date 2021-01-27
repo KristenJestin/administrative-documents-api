@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Application.DTOs.Account
 {
@@ -9,6 +10,8 @@ namespace Application.DTOs.Account
         public string Email { get; set; }
         public bool IsVerified { get; set; }
         public string JwtToken { get; set; }
+        public DateTime Expires { get; set; }
+
         [JsonIgnore]
         public string RefreshToken { get; set; }
     }

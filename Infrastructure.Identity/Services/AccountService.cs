@@ -57,6 +57,7 @@ namespace Infrastructure.Identity.Services
             var response = _mapper.Map<AuthenticateResponse>(account);
             response.JwtToken = jwtToken;
             response.RefreshToken = refreshToken.Token;
+            response.Expires = DateTime.Now.AddMinutes(_jwtSettings.DurationInMinutes);
             return response;
         }
 
@@ -83,6 +84,7 @@ namespace Infrastructure.Identity.Services
             AuthenticateResponse response = _mapper.Map<AuthenticateResponse>(account);
             response.JwtToken = jwtToken;
             response.RefreshToken = newRefreshToken.Token;
+            response.Expires = DateTime.Now.AddMinutes(_jwtSettings.DurationInMinutes);
             return response;
         }
         public async Task RevokeTokenAsync(string token, string ipAddress)

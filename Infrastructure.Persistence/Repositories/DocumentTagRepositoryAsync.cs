@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<IEnumerable<DocumentTag>> GetSameUniqueNameAsync(IEnumerable<string> tags, int user)
             => await _tags
-                .Where(t => tags.Contains(t.UniqueName) && t.CreatedBy == user)
+                .Where(t => tags.Contains(t.Slug) && t.CreatedBy == user)
                 .AsNoTracking()
                 .ToListAsync();
 
