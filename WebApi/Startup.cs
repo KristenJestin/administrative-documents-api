@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 using Application;
 using Infrastructure.Shared;
 using Application.Interfaces.Services;
+using Microsoft.AspNetCore.Rewrite;
+using WebApi.Extensions;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace WebApi
 {
@@ -35,15 +38,13 @@ namespace WebApi
 			services.AddPersistenceInfrastructure(Configuration);
 			services.AddSharedInfrastructure();
 
-			services.AddControllers()
+			services
+				.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer())))
 				.AddNewtonsoftJson();
 			services.AddApiVersioningExtension();
 			services.AddValidationExtension();
 			// allow to manage model state via AutoWrapper
-			services.Configure<ApiBehaviorOptions>(options =>
-			{
-				options.SuppressModelStateInvalidFilter = true;
-			});
+			services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 			services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
@@ -64,10 +65,11 @@ namespace WebApi
 				//app.UseDeveloperExceptionPage();
 			}
 
+			app.UseRewriter(new RewriteOptions().Add(new KebabCaseRule()));
 			app.UseRouting();
 
 			// global cors policy
-			app.UseCors(x => x
+			app.UseCors(options => options
 				.SetIsOriginAllowed(origin => true)
 				.AllowAnyMethod()
 				.AllowAnyHeader()
@@ -76,7 +78,7 @@ namespace WebApi
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseEndpoints(endpoints => endpoints.MapControllers());
+			app.UseEndpoints(options => options.MapControllers());
 		}
 	}
 }
