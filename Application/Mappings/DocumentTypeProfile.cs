@@ -11,6 +11,7 @@ namespace Application.Mappings
         public DocumentTypeProfile()
         {
             CreateMap<DocumentType, ReadDocumentTypeResponse>();
+            CreateMap<DocumentType, ReadDocumentTypeListResponse>();
         }
     }
 }
