@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs.Account
 {
-    public class AuthenticationRequest
+    public class AuthenticateRequest
     {
         [Required]
         [JsonProperty("Username")]

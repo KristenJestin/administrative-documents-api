@@ -23,6 +23,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Take(pageSize)
                 .OrderByDescending(d => d.CreatedAt)
                 .Include(d => d.Type)
+                .Include(d => d.Tags)
                 .AsNoTracking()
                 .ToListAsync();
 

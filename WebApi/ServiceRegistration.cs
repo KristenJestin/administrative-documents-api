@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
-using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Behaviours;
 
-namespace WebApi.Extensions
+namespace WebApi
 {
 	public static class ServiceRegistration
 	{

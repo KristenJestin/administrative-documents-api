@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Application.Interfaces.Services;
 using Infrastructure.Identity.Contexts;
-using Infrastructure.Identity.Models;
 using Infrastructure.Identity.Seeds;
+using Infrastructure.Identity.Services;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Seeds;
 using Microsoft.AspNetCore.Identity;
@@ -21,22 +22,19 @@ namespace WebApi.Extensions
 				IServiceProvider services = scope.ServiceProvider;
 
 				// context
-				IdentityContext identityContext = services.GetRequiredService<IdentityContext>();
+				IdentityDbContext identityContext = services.GetRequiredService<IdentityDbContext>();
 				ApplicationDbContext applicationDbContext = services.GetRequiredService<ApplicationDbContext>();
 
-				// user
-				UserManager<ApplicationUser> userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-				RoleManager<ApplicationRole> roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
+				// services
+				IAccountService accountService = services.GetRequiredService<IAccountService>();
 
 				// seeds				
 				#region user
-				if (!await identityContext.Roles.AnyAsync())
-					await RolesSeed.SeedAsync(userManager, roleManager);
 #if DEBUG
-				if (!await identityContext.Users.AnyAsync())
+				if (!await identityContext.Accounts.AnyAsync())
 				{
-					await SuperAdminSeed.SeedAsync(userManager, roleManager);
-					await BasicUserSeed.SeedAsync(userManager, roleManager);
+					await AdminUserSeed.SeedAsync(accountService, identityContext);
+					await BasicUserSeed.SeedAsync(accountService, identityContext);
 				}
 #endif
 				#endregion

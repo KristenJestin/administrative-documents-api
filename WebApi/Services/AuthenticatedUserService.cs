@@ -1,7 +1,6 @@
-﻿using Application.Interfaces;
+﻿using System.Security.Claims;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace WebApi.Services
 {
@@ -16,7 +15,6 @@ namespace WebApi.Services
 				UserId = id;
 			}
 		}
-
 		public int UserId { get; }
 	}
 }

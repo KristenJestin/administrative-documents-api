@@ -6,8 +6,8 @@ using Application.Features.Documents.Queries.GetAllDocuments;
 using Application.Features.Documents.Queries.GetDocumentById;
 using Application.Wrappers;
 using AutoWrapper.Wrappers;
-using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.v1
@@ -16,8 +16,8 @@ namespace WebApi.Controllers.v1
 	[ApiVersion("1.0")]
 	public class DocumentsController : BaseApiController
 	{
-		[HttpGet]
-		public async Task<IActionResult> Get([FromQuery] GetAllDocumentsParameter filter)
+		[HttpGet("[action]")]
+		public async Task<IActionResult> Latest([FromQuery] GetAllDocumentsParameter filter)
 			=> Ok(await Mediator.Send(new GetAllDocumentsQuery() { PageSize = filter.PageSize, Page = filter.Page }));
 
 		[HttpGet("{id}")]
@@ -28,7 +28,7 @@ namespace WebApi.Controllers.v1
 		public async Task<IActionResult> Post([FromForm] CreateDocumentCommand command)
 		{
 			if (command == null)
-				throw new ApiProblemDetailsException("Invalid JSON.", (int)HttpStatusCode.BadRequest);
+				throw new ApiProblemDetailsException("Invalid JSON.", StatusCodes.Status400BadRequest);
 
 			BasicApiResponse<ReadDocumentResponse> response = await Mediator.Send(command);
 			return CreatedAtAction(nameof(Get), new { id = response.Result.Id }, response);
