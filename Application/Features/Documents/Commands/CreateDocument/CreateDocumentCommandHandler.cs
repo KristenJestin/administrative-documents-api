@@ -56,9 +56,10 @@ namespace Application.Features.Documents.Commands.CreateDocument
             document.TypeId = request.Type;
 
             // tags
-            if (request.Tags != null && request.Tags.Count() > 0)
+            IEnumerable<string> validTags = request.Tags.Where(tag => !string.IsNullOrWhiteSpace(tag));
+            if (validTags != null && validTags.Count() > 0)
             {
-                IEnumerable<DocumentTag> existingTags = await _documentTagRepository.GetSameUniqueNameAsync(request.Tags.Select(tag => Slugger.Generate(tag)), _authenticatedUser.UserId);
+                IEnumerable<DocumentTag> existingTags = await _documentTagRepository.GetSameUniqueNameAsync(validTags.Select(tag => Slugger.Generate(tag)), _authenticatedUser.UserId);
 
                 // add already exiting tags
                 _documentTagRepository.AttachRange(existingTags);
@@ -67,7 +68,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
 
                 // add new tags
                 IEnumerable<string> existingTagSlugs = existingTags.Select(t => t.Slug);
-                foreach (string tag in request.Tags)
+                foreach (string tag in validTags)
                 {
                     string slug = Slugger.Generate(tag);
                     if (!existingTagSlugs.Contains(slug))
