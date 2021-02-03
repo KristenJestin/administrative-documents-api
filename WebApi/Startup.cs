@@ -33,7 +33,7 @@ namespace WebApi
 		{
 			services.AddCors();
 
-			services.AddApplicationLayer();
+			services.AddApplicationLayer(Configuration);
 			services.AddIdentityInfrastructure(Configuration);
 			services.AddPersistenceInfrastructure(Configuration);
 			services.AddSharedInfrastructure();
@@ -57,7 +57,8 @@ namespace WebApi
 			{
 				UseCustomSchema = true,
 				UseApiProblemDetailsException = true,
-				IgnoreNullValue = false
+				IgnoreNullValue = false,
+				IsApiOnly = true
 			});
 
 			if (env.IsDevelopment())

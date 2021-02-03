@@ -1,10 +1,11 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Application.DTOs.Document;
 using Application.Features.Documents.Commands.CreateDocument;
+using Application.Features.Documents.Queries.DownloadDocumentById;
 using Application.Features.Documents.Queries.GetAllDocuments;
 using Application.Features.Documents.Queries.GetDocumentById;
 using Application.Wrappers;
+using AutoWrapper.Filters;
 using AutoWrapper.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +33,14 @@ namespace WebApi.Controllers.v1
 
 			BasicApiResponse<ReadDocumentResponse> response = await Mediator.Send(command);
 			return CreatedAtAction(nameof(Get), new { id = response.Result.Id }, response);
+		}
+
+		[HttpGet("{id}/[action]")]
+		[AutoWrapIgnore]
+		public async Task<IActionResult> Download(int id)
+		{
+			DownloadDocumentResponse download = await Mediator.Send(new DownloadDocumentByIdQuery { Id = id });
+			return File(download.FileContent, download.ContentType, download.Name);
 		}
 	}
 }
