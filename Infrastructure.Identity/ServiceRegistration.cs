@@ -31,7 +31,6 @@ namespace Infrastructure.Identity
             #region settings
             IConfigurationSection jwtSettingsSection = configuration.GetSection("JwtSettings");
             services.Configure<JwtSettings>(jwtSettingsSection);
-            services.Configure<DocumentSettings>(configuration.GetSection("DocumentSettings"));
             #endregion
 
             JwtSettings wwtSettings = jwtSettingsSection.Get<JwtSettings>();

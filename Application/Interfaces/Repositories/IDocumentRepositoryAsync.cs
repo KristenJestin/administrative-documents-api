@@ -7,5 +7,6 @@ namespace Application.Interfaces.Repositories
     {
         //Task<bool> IsUniqueNameFolderAsync(string barcode);
         Task<Document> FindByIdWithTypeAndTagsAsync(int id);
+        Task<Document> FindByIdWithFileAsync(int id);
     }
 }

@@ -107,9 +107,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
             catch { }
 
             // copy file
-            string resourcePath = Path.Combine("Resources", "Uploads");
-            string destinationPath = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
-            FileInfo fileInfo = new FileInfo(Path.Combine(destinationPath, GenerateUniqueFileName()));
+            FileInfo fileInfo = new FileInfo(_settings.BuildFilePath(GenerateUniqueFileName()));
 
             // copy in resources folder
             using (var stream = new FileStream(fileInfo.FullName, FileMode.Create))

@@ -33,6 +33,11 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(d => d.Tags)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
+        public async Task<Document> FindByIdWithFileAsync(int id)
+            => await _documents
+                .Include(d => d.File)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
         //public Task<bool> IsUniqueBarcodeAsync(string barcode)
         //{
         //    return _products
