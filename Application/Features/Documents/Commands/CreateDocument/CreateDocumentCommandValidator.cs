@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Documents.Commands.CreateDocument
 {
-    public partial class CreateDocumentCommandValidator : AbstractValidator<CreateDocumentCommand>
+    public class CreateDocumentCommandValidator : AbstractValidator<CreateDocumentCommand>
     {
         private readonly IDocumentRepositoryAsync _documentRepository;
         private readonly IDocumentTypeRepositoryAsync _documentTypeRepository;

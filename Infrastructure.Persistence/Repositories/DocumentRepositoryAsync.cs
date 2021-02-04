@@ -18,12 +18,23 @@ namespace Infrastructure.Persistence.Repositories
         }
 
         public override async Task<IReadOnlyList<Document>> GetPagedReponseAsync(int pageNumber, int pageSize)
+            // TODO : add check of the creator
             => await _documents
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .OrderByDescending(d => d.CreatedAt)
                 .Include(d => d.Type)
                 .Include(d => d.Tags)
+                .AsNoTracking()
+                .ToListAsync();
+
+        public virtual async Task<IReadOnlyList<Document>> GetPagedReponseAsync(int pageNumber, int pageSize, string search)
+            // TODO : add check of the creator
+            // TODO : search in note with ranking
+            => await _documents
+                .Where(d => d.Name.Contains(search))
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .AsNoTracking()
                 .ToListAsync();
 

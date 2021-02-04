@@ -8,7 +8,7 @@
         public PagedRequestParameter()
         {
             Page = 1;
-            this.PageSize = 15;
+            PageSize = 15;
         }
         public PagedRequestParameter(int page, int pageSize)
         {
