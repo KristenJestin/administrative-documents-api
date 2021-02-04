@@ -29,6 +29,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
         private readonly IMapper _mapper;
         private readonly ICryptographyService _cryptographyService;
         private readonly DocumentSettings _settings;
+
         public CreateDocumentCommandHandler(
             IDocumentRepositoryAsync documentRepository,
             IDocumentTypeRepositoryAsync documentTypeRepository,

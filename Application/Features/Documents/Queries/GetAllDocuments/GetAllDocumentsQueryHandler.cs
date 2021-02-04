@@ -1,7 +1,10 @@
 ﻿using Application.DTOs.Document;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Application.Parameters;
 using Application.Wrappers;
 using AutoMapper;
+using Domain.Common;
 using Domain.Entities;
 using MediatR;
 using System.Collections.Generic;
@@ -12,25 +15,24 @@ namespace Application.Features.Documents.Queries.GetAllDocuments
 {
     public class GetAllDocumentsQueryHandler : IRequestHandler<GetAllDocumentsQuery, PagedApiResponse<IEnumerable<ReadDocumentListResponse>>>
     {
-        private readonly IDocumentRepositoryAsync _documentRepository;
+        private readonly IAuthenticatedUserService _authenticatedUser;
+        private readonly IDocumentRepositoryAsync _repository;
         private readonly IMapper _mapper;
-        public GetAllDocumentsQueryHandler(IDocumentRepositoryAsync documentRepository, IMapper mapper)
+        public GetAllDocumentsQueryHandler(IAuthenticatedUserService authenticatedUser, IDocumentRepositoryAsync documentRepository, IMapper mapper)
         {
-            _documentRepository = documentRepository;
+            _authenticatedUser = authenticatedUser;
+            _repository = documentRepository;
             _mapper = mapper;
         }
 
         public async Task<PagedApiResponse<IEnumerable<ReadDocumentListResponse>>> Handle(GetAllDocumentsQuery request, CancellationToken cancellationToken)
         {
-            GetAllDocumentsParameter validFilter = _mapper.Map<GetAllDocumentsParameter>(request);
-            IReadOnlyList<Document> documents = await _documentRepository.GetPagedReponseAsync(validFilter.Page, validFilter.PageSize);
-            IEnumerable<ReadDocumentListResponse> dto = _mapper.Map<IEnumerable<ReadDocumentListResponse>>(documents);
+            request.ValidateValues();
 
-            ApiResponsePagination pagination = new ApiResponsePagination
-            {
-                Page = validFilter.Page,
-                PageSize = validFilter.PageSize
-            };
+            PaginatedList<Document> paginatedList = await _repository.GetPagedReponseAsync(_authenticatedUser.UserId, request.Page, request.PageSize);
+            IEnumerable<ReadDocumentListResponse> dto = _mapper.Map<IEnumerable<ReadDocumentListResponse>>(paginatedList.Items);
+
+            ApiResponsePagination pagination = ApiResponsePagination.Build(paginatedList);
             return new PagedApiResponse<IEnumerable<ReadDocumentListResponse>>(dto, pagination);
         }
     }

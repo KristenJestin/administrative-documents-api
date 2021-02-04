@@ -16,9 +16,6 @@ namespace Application.Mappings
                 .ForMember(x => x.File, y => y.Ignore())
                 .ForMember(x => x.Type, y => y.Ignore());
 
-            CreateMap<GetAllDocumentsQuery, GetAllDocumentsParameter>();
-            CreateMap<GetDocumentsByTermsQuery, GetDocumentsByTermsParameter>();
-
             CreateMap<Document, ReadDocumentResponse>();
             CreateMap<Document, ReadDocumentListResponse>();
         }

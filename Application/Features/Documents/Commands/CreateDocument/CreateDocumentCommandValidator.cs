@@ -70,7 +70,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
                         .NotNull()
                         .GreaterThan(0).WithMessage("{PropertyName} size must be greater than {ComparisonValue}.")
                         .LessThanOrEqualTo(52428800).WithMessage("{PropertyName} size is larger than allowed (50MB max).");
-                    
+
                     RuleFor(d => d.File.ContentType)
                         .NotNull()
                         .Must(IsValidFileType).WithMessage(d => $"{Path.GetExtension(d.File.FileName)} type is not allowed.");

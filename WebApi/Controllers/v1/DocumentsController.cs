@@ -18,8 +18,7 @@ namespace WebApi.Controllers.v1
 	[ApiVersion("1.0")]
 	public class DocumentsController : BaseApiController
 	{
-
-		[HttpGet("{id}:int")]
+		[HttpGet("{id:int}")]
 		public async Task<IActionResult> Get(int id)
 			=> Ok(await Mediator.Send(new GetDocumentByIdQuery { Id = id }));
 
@@ -43,12 +42,12 @@ namespace WebApi.Controllers.v1
 		}
 
 		[HttpGet("[action]")]
-		public async Task<IActionResult> Latest([FromQuery] GetAllDocumentsParameter filter)
-			=> Ok(await Mediator.Send(new GetAllDocumentsQuery() { PageSize = filter.PageSize, Page = filter.Page }));
+		public async Task<IActionResult> Latest([FromQuery] GetAllDocumentsQuery filter)
+			=> Ok(await Mediator.Send(filter));
 
 		[HttpGet("[action]")]
-		public async Task<IActionResult> Search([FromQuery] GetDocumentsByTermsParameter filter)
-			=> Ok(await Mediator.Send(new GetDocumentsByTermsQuery { PageSize = filter.PageSize, Page = filter.Page, Term = filter.Term }));
+		public async Task<IActionResult> Search([FromQuery] GetDocumentsByTermsQuery filter)
+			=> Ok(await Mediator.Send(filter));
 		#endregion
 	}
 }

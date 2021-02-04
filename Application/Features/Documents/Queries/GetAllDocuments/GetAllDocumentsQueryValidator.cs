@@ -2,5 +2,5 @@
 
 namespace Application.Features.Documents.Queries.GetAllDocuments
 {
-    public class GetAllDocumentsParameter : PagedRequestParameter { }
+    public class GetAllDocumentsQueryValidator : PagedRequestQueryValidator<GetAllDocumentsQuery> { }
 }
