@@ -16,6 +16,7 @@ using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Rewrite;
 using WebApi.Extensions;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using System.Globalization;
 
 namespace WebApi
 {
@@ -53,6 +54,11 @@ namespace WebApi
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
+			CultureInfo cultureInfo = new CultureInfo("fr-FR");
+			cultureInfo.NumberFormat.CurrencySymbol = "€";
+			CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+			CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
 			app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
 			{
 				UseCustomSchema = true,

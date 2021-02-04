@@ -19,18 +19,29 @@ namespace Infrastructure.Persistence.Repositories
             _documents = dbContext.Set<Document>();
         }
 
-        public async Task<PaginatedList<Document>> GetPagedReponseAsync(int user, int pageNumber, int pageSize, string search = null)
+        public async Task<PaginatedList<Document>> GetPagedReponseAsync(int user, int pageNumber, int pageSize, string search = null, int? type = null, int? tag = null)
         {
             IQueryable<Document> query = _documents.Where(d => d.CreatedBy == user);
 
-            // terms
+            #region parameters
             if (!string.IsNullOrWhiteSpace(search))
                 query = query.Where(d => d.Name.Contains(search));
+
+            if (type != null)
+                query = query.Where(d => d.TypeId == type);
+
+            if (tag != null)
+                query = query
+                    .Where(d => d.Tags.Any(t => t.Id == tag.Value));
+            #endregion
 
             // total
             int count = await query.CountAsync();
             // paginations
-            query = query.Paginate(pageNumber, pageSize)
+            query = query
+                .Paginate(pageNumber, pageSize)
+                .Include(d => d.Type)
+                .Include(d => d.Tags)
                 .AsNoTracking();
 
             // list documents

@@ -7,7 +7,7 @@ namespace Application.Interfaces.Repositories
     public interface IDocumentRepositoryAsync : IGenericRepositoryAsync<Document>
     {
         //Task<bool> IsUniqueNameFolderAsync(string barcode);
-        Task<PaginatedList<Document>> GetPagedReponseAsync(int user, int pageNumber, int pageSize, string search = null);
+        Task<PaginatedList<Document>> GetPagedReponseAsync(int user, int pageNumber, int pageSize, string search = null, int? type = null, int? tag = null);
 
         Task<Document> FindByIdWithTypeAndTagsAsync(int id);
         Task<Document> FindByIdWithFileAsync(int id);

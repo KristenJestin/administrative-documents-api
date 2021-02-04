@@ -60,7 +60,7 @@ namespace Application.Features.Documents.Commands.CreateDocument
             IEnumerable<string> validTags = request.Tags.Where(tag => !string.IsNullOrWhiteSpace(tag));
             if (validTags != null && validTags.Count() > 0)
             {
-                IEnumerable<DocumentTag> existingTags = await _documentTagRepository.GetSameUniqueNameAsync(validTags.Select(tag => Slugger.Generate(tag)), _authenticatedUser.UserId);
+                IEnumerable<DocumentTag> existingTags = await _documentTagRepository.GetSameUniqueNameAsync(_authenticatedUser.UserId, validTags.Select(tag => Slugger.Generate(tag)));
 
                 // add already exiting tags
                 _documentTagRepository.AttachRange(existingTags);

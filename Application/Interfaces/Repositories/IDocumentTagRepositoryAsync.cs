@@ -6,7 +6,8 @@ namespace Application.Interfaces.Repositories
 {
     public interface IDocumentTagRepositoryAsync : IGenericRepositoryAsync<DocumentTag>
     {
-        Task<IEnumerable<DocumentTag>> GetSameUniqueNameAsync(IEnumerable<string> tags, int user);
+        Task<DocumentTag> FindBySlugAsync(int user, string slug);
+        Task<IEnumerable<DocumentTag>> GetSameUniqueNameAsync(int user, IEnumerable<string> tags);
         void AttachRange(IEnumerable<DocumentTag> tags);
     }
 }

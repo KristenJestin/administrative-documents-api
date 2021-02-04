@@ -17,7 +17,14 @@ namespace Infrastructure.Persistence.Repositories
             _tags = dbContext.Set<DocumentTag>();
         }
 
-        public async Task<IEnumerable<DocumentTag>> GetSameUniqueNameAsync(IEnumerable<string> tags, int user)
+
+        public async Task<DocumentTag> FindBySlugAsync(int user, string slug)
+            => await _tags
+                .Where(t => t.CreatedBy == user && t.Slug == slug)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<DocumentTag>> GetSameUniqueNameAsync(int user, IEnumerable<string> tags)
             => await _tags
                 .Where(t => tags.Contains(t.Slug) && t.CreatedBy == user)
                 .AsNoTracking()
