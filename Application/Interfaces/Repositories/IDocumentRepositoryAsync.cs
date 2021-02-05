@@ -9,7 +9,7 @@ namespace Application.Interfaces.Repositories
         //Task<bool> IsUniqueNameFolderAsync(string barcode);
         Task<PaginatedList<Document>> GetPagedReponseAsync(int user, int pageNumber, int pageSize, string search = null, int? type = null, int? tag = null);
 
-        Task<Document> FindByIdWithTypeAndTagsAsync(int id);
+        Task<Document> FindByIdWithTypeAndTagsAndFileAsync(int id);
         Task<Document> FindByIdWithFileAsync(int id);
     }
 }

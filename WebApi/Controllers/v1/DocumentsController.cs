@@ -38,7 +38,7 @@ namespace WebApi.Controllers.v1
 		public async Task<IActionResult> Download(int id)
 		{
 			DownloadDocumentResponse download = await Mediator.Send(new DownloadDocumentByIdQuery { Id = id });
-			return File(download.FileContent, download.ContentType, download.Name);
+			return File(download.FileContent, download.ContentType, $"{download.Name}");
 		}
 
 		[HttpGet("[action]")]

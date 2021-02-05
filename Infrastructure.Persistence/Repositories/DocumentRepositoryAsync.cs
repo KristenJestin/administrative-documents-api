@@ -48,10 +48,11 @@ namespace Infrastructure.Persistence.Repositories
             return new PaginatedList<Document>(await query.ToListAsync(), count, pageNumber, pageSize);
         }
 
-        public async Task<Document> FindByIdWithTypeAndTagsAsync(int id)
+        public async Task<Document> FindByIdWithTypeAndTagsAndFileAsync(int id)
             => await _documents
                 .Include(d => d.Type)
                 .Include(d => d.Tags)
+                .Include(d => d.File)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
         public async Task<Document> FindByIdWithFileAsync(int id)
