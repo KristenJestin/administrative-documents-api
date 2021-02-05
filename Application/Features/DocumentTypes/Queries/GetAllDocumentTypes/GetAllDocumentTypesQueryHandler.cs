@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Documents.Queries.GetAllDocumentTypes
+namespace Application.Features.DocumentTypes.Queries.GetAllDocumentTypes
 {
     public class GetAllDocumentTypesQueryHandler : IRequestHandler<GetAllDocumentTypesQuery, BasicApiResponse<IEnumerable<ReadDocumentTypeListResponse>>>
     {
