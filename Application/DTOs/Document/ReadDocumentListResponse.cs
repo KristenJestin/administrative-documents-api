@@ -1,4 +1,4 @@
-﻿using Application.DTOs.DocumentTags;
+﻿using Application.DTOs.DocumentTag;
 using Application.DTOs.DocumentType;
 using System;
 using System.Collections.Generic;

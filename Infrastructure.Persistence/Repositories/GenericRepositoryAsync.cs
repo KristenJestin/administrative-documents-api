@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public virtual async Task<T> FindByIdAsync(int id)
             => await _dbContext.Set<T>().FindAsync(id);
-        
+
         public async Task<T> AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
@@ -36,7 +36,7 @@ namespace Infrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync()
             => await _dbContext
                  .Set<T>()
                  .ToListAsync();

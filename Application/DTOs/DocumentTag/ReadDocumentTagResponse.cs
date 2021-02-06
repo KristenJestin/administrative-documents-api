@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs.DocumentTags
+﻿namespace Application.DTOs.DocumentTag
 {
     public class ReadDocumentTagResponse
     {
