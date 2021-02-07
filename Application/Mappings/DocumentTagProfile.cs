@@ -1,4 +1,4 @@
-﻿using Application.DTOs.DocumentTags;
+﻿using Application.DTOs.DocumentTag;
 using AutoMapper;
 using Domain.Entities;
 
@@ -9,6 +9,7 @@ namespace Application.Mappings
         public DocumentTagProfile()
         {
             CreateMap<DocumentTag, ReadDocumentTagResponse>();
+            CreateMap<DocumentTag, ReadDocumentTagListResponse>();
         }
     }
 }

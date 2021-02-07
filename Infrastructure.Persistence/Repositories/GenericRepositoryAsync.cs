@@ -17,14 +17,6 @@ namespace Infrastructure.Persistence.Repositories
         public virtual async Task<T> FindByIdAsync(int id)
             => await _dbContext.Set<T>().FindAsync(id);
 
-        public virtual async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize)
-            => await _dbContext
-                .Set<T>()
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .AsNoTracking()
-                .ToListAsync();
-
         public async Task<T> AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
@@ -44,7 +36,7 @@ namespace Infrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync()
             => await _dbContext
                  .Set<T>()
                  .ToListAsync();

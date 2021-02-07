@@ -27,7 +27,7 @@ namespace Application.Features.Documents.Queries.GetDocumentById
 
         public async Task<BasicApiResponse<ReadDocumentResponse>> Handle(GetDocumentByIdQuery query, CancellationToken cancellationToken)
         {
-            Document document = await _documentRepository.FindByIdWithTypeAndTagsAsync(query.Id);
+            Document document = await _documentRepository.FindByIdWithTypeAndTagsAndFileAsync(query.Id);
 
             if (document == null)
                 throw new ApiProblemDetailsException($"Record with id: {query.Id} does not exist.", StatusCodes.Status404NotFound);

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.DocumentTags;
+﻿using Application.DTOs.DocumentFile;
+using Application.DTOs.DocumentTag;
 using Application.DTOs.DocumentType;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Application.DTOs.Document
         public string Note { get; set; }
         public ReadDocumentTypeResponse Type { get; set; }
         public ICollection<ReadDocumentTagResponse> Tags { get; set; }
+        public ReadDocumentFileResponse File { get; set; }
 
 
         #region driven by type
