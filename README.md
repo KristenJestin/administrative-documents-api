@@ -75,10 +75,10 @@ Web application allowing to store, in a secure way, administrative files (Back E
     dotnet ef database update
     ```
 3. Start app
-
     ```sh
     dotnet run
     ```
+4. Install the web client part [Administrative Documents Web Client](https://github.com/KristenJestin/administrative-documents-client-web)
 
 ## Roadmap
 
