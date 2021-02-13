@@ -98,8 +98,8 @@ Project Link: [https://github.com/KristenJestin/administrative-documents-api](ht
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[build-shield]: https://img.shields.io/github/workflow/status/KristenJestin/administrative-documents-api/CI?style=for-the-badge
-[build-url]: https://github.com/KristenJestin/administrative-documents-api/actions?query=CI
+[build-shield]: https://img.shields.io/github/workflow/status/KristenJestin/administrative-documents-api/Build?style=for-the-badge
+[build-url]: https://github.com/KristenJestin/administrative-documents-api/actions?query=workflow:Build
 [license-shield]: https://img.shields.io/github/license/KristenJestin/administrative-documents-api.svg?style=for-the-badge
 [license-url]: https://github.com/KristenJestin/administrative-documents-api/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
