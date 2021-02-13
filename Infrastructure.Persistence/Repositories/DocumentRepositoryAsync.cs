@@ -42,6 +42,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Paginate(pageNumber, pageSize)
                 .Include(d => d.Type)
                 .Include(d => d.Tags)
+                .OrderByDescending(d => d.Date)
                 .AsNoTracking();
 
             // list documents
